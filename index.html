@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitation QR Code Generator</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #qrcode {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #downloadBtn {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #27ae60;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Invitation QR Code Generator</h2>
+
+    <!-- FORM -->
+    <label>Guest Name</label>
+    <input type="text" id="name" placeholder="e.g. John Doe">
+
+    <label>Event Name</label>
+    <input type="text" id="event" placeholder="e.g. Wedding Ceremony">
+
+    <label>Date</label>
+    <input type="date" id="date">
+
+    <label>Venue / Location</label>
+    <input type="text" id="venue" placeholder="e.g. Blue Beach Resort">
+
+    <label>Phone Number (optional)</label>
+    <input type="text" id="phone" placeholder="e.g. 0712345678">
+
+    <label>Custom Message (optional)</label>
+    <textarea id="message" rows="3" placeholder="Write a message..."></textarea>
+
+    <button onclick="generateQR()">Generate QR Code</button>
+
+    <!-- QR RESULT -->
+    <div id="qrcode"></div>
+    <a id="downloadBtn" download="invitation_qr.png">Download QR Code</a>
+</div>
+
+<!-- QR CODE LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    function generateQR() {
+        const name = document.getElementById("name").value;
+        const event = document.getElementById("event").value;
+        const date = document.getElementById("date").value;
+        const venue = document.getElementById("venue").value;
+        const phone = document.getElementById("phone").value;
+        const message = document.getElementById("message").value;
+
+        if (!name || !event || !date || !venue) {
+            alert("Please fill all required fields: Name, Event, Date, Venue");
+            return;
+        }
+
+        // Combine invitation text
+        const invitationText = 
+`INVITATION DETAILS
+------------------------
+Name: ${name}
+Event: ${event}
+Date: ${date}
+Venue: ${venue}
+Phone: ${phone}
+Message: ${message}`;
+
+        // Clear old QR
+        document.getElementById("qrcode").innerHTML = "";
+
+        // Generate new QR
+        const qr = new QRCode(document.getElementById("qrcode"), {
+            text: invitationText,
+            width: 200,
+            height: 200
+        });
+
+        // Enable download button
+        setTimeout(() => {
+            const img = document.querySelector("#qrcode img");
+            if (img) {
+                const downloadBtn = document.getElementById("downloadBtn");
+                downloadBtn.href = img.src;
+                downloadBtn.style.display = "block";
+            }
+        }, 500);
+    }
+</script>
+
+</body>
+</html>
